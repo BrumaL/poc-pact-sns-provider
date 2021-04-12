@@ -1,5 +1,5 @@
 import express from "express";
-import AWS, { AWSError } from "aws-sdk";
+import AWS from "aws-sdk";
 
 const app = express();
 app.use(express.json());
@@ -11,42 +11,41 @@ const sns = new AWS.SNS({ credentials: credentials, region: "eu-north-1" });
 
 app.get("/status", (req, res) => res.json({ status: "ok", sns: sns }));
 
-export const sendMessage = async (params: AWS.SNS.PublishInput) => {
-  let response: AWS.AWSError | AWS.SNS.PublishResponse;
-  sns.publish(params, function (error, data) {
-    if (error) {
-      console.log(error);
-      response = error;
-    } else {
-      console.log(data);
-      response = data;
-    }
-  });
-
-  return response;
-};
-
-app.post("/sendMessage", (req, res) => {
-  let params: AWS.SNS.PublishInput = {
-    Message: req.body.message,
-    TopicArn: "arn:aws:sns:eu-north-1:286643423608:vs-prto-test-topic",
+export const convertRequestToSnsParams = (request: any) => {
+  let params = {
+    Message: request.body.message,
     MessageAttributes: {
       Country: {
         DataType: "String",
-        StringValue: req.body.country,
+        StringValue: request.body.country,
       },
       Region: {
         DataType: "String",
-        StringValue: req.body.region,
+        StringValue: request.body.region,
       },
     },
   };
 
-  const response = sendMessage(params);
+  return params;
+};
 
-  console.log("response: ", response);
+app.post("/sendMessage", async (req, res) => {
+  const params = convertRequestToSnsParams(req);
 
-  return res.send(response);
+  const request: AWS.SNS.PublishInput = {
+    ...params,
+    TopicArn: "arn:aws:sns:eu-north-1:286643423608:vs-prto-test-topic",
+  };
+
+  sns.publish(request, function (error, data) {
+    if (error) {
+      console.log(error);
+      return res.status(400).send(error.message);
+    } else {
+      console.log(data);
+      return res.send(data);
+    }
+  });
 });
 
 if (require.main === module) {
