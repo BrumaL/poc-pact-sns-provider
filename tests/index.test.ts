@@ -2,11 +2,11 @@ import {
   MessageProviderPact,
   PactMessageProviderOptions,
 } from "@pact-foundation/pact";
-import { versionFromGitTag } from "@pact-foundation/absolute-version";
+import dotenv from "dotenv";
+dotenv.config();
 
 import { convertRequestToSnsParams } from "../src/index";
 
-const providerVersion = versionFromGitTag();
 const testTimeout = 20000;
 
 describe("provider of sns message", () => {
@@ -18,20 +18,31 @@ describe("provider of sns message", () => {
     },
   };
 
+  console.log("process env: ", process.env.PACT_BROKER_BASE_URL);
+  console.log("process env ci: ", process.env.CI);
+  console.log("process env git branch: ", process.env.GIT_BRANCH);
+
   const options: PactMessageProviderOptions = {
     messageProviders: {
       "create country event": () =>
         Promise.resolve(convertRequestToSnsParams(request)),
     },
+    logLevel: "info",
     provider: "MartinsMessageProvider",
-    providerVersion,
-    // Fetch pacts from broker
-    pactBrokerUrl: "https://meklund.pactflow.io/",
-    pactBrokerToken: "oqC6W6RnlmMgp-NhQfapBw",
-    // Fetch from broker with given tags
-    consumerVersionTags: ["master"],
-    // Tag provider with given tags
-    providerVersionTags: ["master"],
+    pactBrokerUrl: process.env.PACT_BROKER_BASE_URL,
+    pactBrokerToken: process.env.PACT_BROKER_TOKEN,
+    consumerVersionSelectors: [
+      {
+        tag: "master",
+        latest: true,
+      },
+      {
+        tag: process.env.CONSUMER_BRANCH,
+        latest: true,
+      },
+    ],
+    providerVersion: process.env.CI == "true" && process.env.CI_VERSION,
+    providerVersionTags: process.env.GIT_BRANCH ? [process.env.GIT_BRANCH] : [],
     publishVerificationResult: true,
   };
 
