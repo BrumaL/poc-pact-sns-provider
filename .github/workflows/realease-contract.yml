@@ -1,0 +1,31 @@
+name: release-contract
+
+on:
+  pull_request:
+    types:
+      - closed
+
+env:
+  PACT_BROKER_BASE_URL: ${{secrets.PACT_BROKER_BASE_URL}}
+  PACT_BROKER_TOKEN: ${{secrets.PACT_BROKER_TOKEN}}
+  PACT_BROKER_PUBLISH_VERIFICATION_RESULTS: true
+  PACTICIPANT: MartinsMessageProvider
+  LOG_LEVEL: info
+
+jobs:
+  release-contract:
+    name: Release contract
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    steps:
+      - name: Setup pact-cli
+        run: docker pull pactfoundation/pact-cli:latest
+      - name: Release contract
+        run: >
+          docker run pactfoundation/pact-cli:latest
+          broker create-version-tag 
+          --pacticipant ${PACTICIPANT} 
+          --version ${{ github.event.pull_request.head.sha }} 
+          --tag ${{ github.base_ref }}
+          --broker-base-url $PACT_BROKER_BASE_URL
+          --broker-token $PACT_BROKER_TOKEN

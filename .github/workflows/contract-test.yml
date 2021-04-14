@@ -26,13 +26,6 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Run tests
         run: yarn test
-      - name: Publish contract
-        run: >
-          yarn pact-broker publish pacts 
-          --broker-base-url $PACT_BROKER_BASE_URL 
-          --broker-token $PACT_BROKER_TOKEN 
-          --consumer-app-version $PACTICIPANT_VERSION 
-          --tag $GITHUB_HEAD_REF
       - name: Can i deploy?
         run: >
           yarn pact-broker can-i-deploy
