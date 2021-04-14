@@ -1,0 +1,40 @@
+name: contract-test
+
+on:
+  workflow_dispatch:
+    inputs:
+      CONSUMER_VERSION_TAGS:
+        description: Tag of consumer contract to verify against
+        required: true
+
+env:
+  PACT_BROKER_BASE_URL: ${{secrets.PACT_BROKER_BASE_URL}}
+  PACT_BROKER_TOKEN: ${{secrets.PACT_BROKER_TOKEN}}
+  PACT_BROKER_PUBLISH_VERIFICATION_RESULTS: true
+  PACTICIPANT: MartinsMessageProvider
+  CONSUMER_BRANCH: ${{ github.event.inputs.CONSUMER_VERSION_TAGS }}
+  GIT_BRANCH: master
+  CI_VERSION: ${{ github.sha }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Run tests
+        run: yarn test
+      - name: Can i deploy?
+        run: >
+          yarn pact-broker can-i-deploy
+          --pacticipant $PACTICIPANT
+          --version $PACTICIPANT_VERSION
+          --to $DEPLOY_TARGET
+          --broker-base-url $PACT_BROKER_BASE_URL
+          --broker-token $PACT_BROKER_TOKEN
