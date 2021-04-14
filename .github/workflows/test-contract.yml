@@ -10,6 +10,7 @@ env:
   PACTICIPANT: MartinsMessageProvider
   PACTICIPANT_VERSION: ${{ github.event.pull_request.head.sha }}
   DEPLOY_TARGET: ${{ github.base_ref }}
+  GIT_BRANCH: master
 
 jobs:
   test:
