@@ -39,6 +39,8 @@ describe("provider of sns message", () => {
     publishVerificationResult: process.env.CI == "true",
   };
 
+  console.log("publishVerificationResult: ", options.publishVerificationResult);
+
   it(
     "sent a message",
     async () => {
