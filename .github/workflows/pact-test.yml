@@ -1,4 +1,4 @@
-name: contract-test
+name: pact-test
 
 on:
   pull_request:
@@ -32,5 +32,7 @@ jobs:
           --pacticipant $PACTICIPANT
           --version $PACTICIPANT_VERSION
           --to $DEPLOY_TARGET
+          --retry-while-unknown 3 
+          --retry-interval 30
           --broker-base-url $PACT_BROKER_BASE_URL
           --broker-token $PACT_BROKER_TOKEN

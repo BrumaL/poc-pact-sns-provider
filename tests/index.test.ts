@@ -32,6 +32,18 @@ describe("provider of sns message", () => {
         tag: "master",
         latest: true,
       },
+      {
+        tag: "dev",
+        latest: true,
+      },
+      {
+        tag: "staging",
+        latest: true,
+      },
+      {
+        tag: "master",
+        latest: true,
+      },
     ],
     providerVersion:
       process.env.CI == "true" && process.env.PACTICIPANT_VERSION,
