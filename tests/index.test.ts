@@ -18,10 +18,6 @@ describe("provider of sns message", () => {
     },
   };
 
-  console.log("process env: ", process.env.PACT_BROKER_BASE_URL);
-  console.log("process env ci: ", process.env.CI);
-  console.log("process env git branch: ", process.env.GIT_BRANCH);
-
   const options: PactMessageProviderOptions = {
     messageProviders: {
       "create country event": () =>
@@ -37,13 +33,22 @@ describe("provider of sns message", () => {
         latest: true,
       },
       {
-        tag: process.env.CONSUMER_BRANCH,
+        tag: "dev",
+        latest: true,
+      },
+      {
+        tag: "staging",
+        latest: true,
+      },
+      {
+        tag: "master",
         latest: true,
       },
     ],
-    providerVersion: process.env.CI == "true" && process.env.CI_VERSION,
+    providerVersion:
+      process.env.CI == "true" && process.env.PACTICIPANT_VERSION,
     providerVersionTags: process.env.GIT_BRANCH ? [process.env.GIT_BRANCH] : [],
-    publishVerificationResult: true,
+    publishVerificationResult: process.env.CI == "true",
   };
 
   it(
