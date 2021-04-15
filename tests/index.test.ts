@@ -13,7 +13,7 @@ describe("provider of sns message", () => {
   const request = {
     body: {
       message: "A simple message",
-      country: "USA",
+      // country: "USA",
       region: "North America",
     },
   };
