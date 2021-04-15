@@ -19,10 +19,6 @@ export const convertRequestToSnsParams = (request: any) => {
         DataType: "String",
         StringValue: request.body.country,
       },
-      Region: {
-        DataType: "String",
-        StringValue: request.body.region,
-      },
     },
   };
 
