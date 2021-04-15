@@ -1,4 +1,4 @@
-name: contract-test
+name: pact-test
 
 on:
   pull_request:
