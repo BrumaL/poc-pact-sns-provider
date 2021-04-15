@@ -14,7 +14,6 @@ describe("provider of sns message", () => {
     body: {
       message: "A simple message",
       country: "USA",
-      region: "North America",
     },
   };
 
