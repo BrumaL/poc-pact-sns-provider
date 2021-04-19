@@ -13,13 +13,14 @@ describe("provider of sns message", () => {
   const request = {
     body: {
       message: "A simple message",
-      country: "USA",
+      id: 1231,
+      name: "Polestar 2",
     },
   };
 
   const options: PactMessageProviderOptions = {
     messageProviders: {
-      "create country event": () =>
+      "create product event": () =>
         Promise.resolve(convertRequestToSnsParams(request)),
     },
     logLevel: "info",
@@ -51,7 +52,7 @@ describe("provider of sns message", () => {
   };
 
   it(
-    "sent a message",
+    "sent a create product message",
     async () => {
       const messageProvider = new MessageProviderPact(options);
       await expect(messageProvider.verify()).resolves.not.toThrow();
