@@ -17,7 +17,7 @@ describe("provider of sns message", () => {
       region: "North America",
     },
   };
-
+  // .
   const options: PactMessageProviderOptions = {
     messageProviders: {
       "create country event": () =>
