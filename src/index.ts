@@ -15,13 +15,13 @@ export const convertRequestToSnsParams = (request: any) => {
   let params = {
     Message: request.body.message,
     MessageAttributes: {
-      Country: {
-        DataType: "String",
-        StringValue: request.body.country,
+      ID: {
+        DataType: "number",
+        StringValue: request.body.id,
       },
-      Region: {
+      Name: {
         DataType: "String",
-        StringValue: request.body.region,
+        StringValue: request.body.name,
       },
     },
   };
