@@ -3,7 +3,7 @@ name: verify-contract
 on:
   workflow_dispatch:
     inputs:
-      PACT_URL:
+      pactUrl:
         description: The "permalink" URL to the newly published pact
         required: true
 
@@ -29,7 +29,7 @@ jobs:
       - name: Run tests
         run: yarn test
         env:
-          PACT_URL: ${{ github.event.inputs.PACT_URL }}
+          pactUrl: ${{ github.event.inputs.pactUrl }}
       - name: Deployment Check
         run: >
           yarn pact-broker can-i-deploy 
