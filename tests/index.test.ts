@@ -17,7 +17,7 @@ describe("provider of sns message", () => {
       name: "Polestar 2",
     },
   };
-  // .
+
   const options: PactMessageProviderOptions = {
     messageProviders: {
       "create product event": () =>
