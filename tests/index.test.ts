@@ -18,15 +18,22 @@ describe("provider of sns message", () => {
     },
   };
 
-  const options: PactMessageProviderOptions = {
-    messageProviders: {
-      "create product event": () =>
-        Promise.resolve(convertRequestToSnsParams(request)),
-    },
+  const baseOptions: Partial<PactMessageProviderOptions> = {
     logLevel: "info",
     provider: "MartinsMessageProvider",
     pactBrokerUrl: process.env.PACT_BROKER_BASE_URL,
     pactBrokerToken: process.env.PACT_BROKER_TOKEN,
+    providerVersion:
+      process.env.CI == "true" && process.env.PACTICIPANT_VERSION,
+    providerVersionTags: process.env.GIT_BRANCH ? [process.env.GIT_BRANCH] : [],
+    publishVerificationResult: process.env.CI == "true",
+  };
+
+  const pactChangedOptions: Partial<PactMessageProviderOptions> = {
+    pactUrls: [process.env.pactUrl],
+  };
+
+  const dynamicPactoptions: Partial<PactMessageProviderOptions> = {
     consumerVersionSelectors: [
       {
         tag: "master",
@@ -41,10 +48,18 @@ describe("provider of sns message", () => {
         latest: true,
       },
     ],
-    providerVersion:
-      process.env.CI == "true" && process.env.PACTICIPANT_VERSION,
-    providerVersionTags: process.env.GIT_BRANCH ? [process.env.GIT_BRANCH] : [],
-    publishVerificationResult: process.env.CI == "true",
+    enablePending: true,
+  };
+
+  const messageProviders: PactMessageProviderOptions["messageProviders"] = {
+    "create product event": () =>
+      Promise.resolve(convertRequestToSnsParams(request)),
+  };
+
+  const options: PactMessageProviderOptions = {
+    ...baseOptions,
+    ...(process.env.pactUrl ? pactChangedOptions : dynamicPactoptions),
+    messageProviders,
   };
 
   it(
