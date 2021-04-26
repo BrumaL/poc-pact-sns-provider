@@ -9,7 +9,7 @@ env:
   PACT_BROKER_TOKEN: ${{secrets.PACT_BROKER_TOKEN}}
   PACTICIPANT: MartinsMessageProvider
   PACTICIPANT_VERSION: ${{ github.sha }}
-  DEPLOY_TARGET: ${{ github.base_ref }}
+  DEPLOY_TARGET: ${{ github.head_ref }}
   GIT_BRANCH: master
 
 jobs:
