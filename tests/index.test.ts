@@ -7,8 +7,6 @@ dotenv.config();
 
 import { convertRequestToSnsParams } from "../src/index";
 
-const testTimeout = 20000;
-
 describe("provider of sns message", () => {
   const request = {
     body: {
@@ -17,14 +15,14 @@ describe("provider of sns message", () => {
       name: "Polestar 2",
     },
   };
+  const testTimeout = 20000;
 
   const baseOptions: Partial<PactMessageProviderOptions> = {
     logLevel: "info",
     provider: "MartinsMessageProvider",
     pactBrokerUrl: process.env.PACT_BROKER_BASE_URL,
     pactBrokerToken: process.env.PACT_BROKER_TOKEN,
-    providerVersion:
-      process.env.CI == "true" && process.env.PACTICIPANT_VERSION,
+    providerVersion: process.env.PACTICIPANT_VERSION,
     providerVersionTags: process.env.GIT_BRANCH ? [process.env.GIT_BRANCH] : [],
     publishVerificationResult: process.env.CI == "true",
   };
@@ -36,7 +34,7 @@ describe("provider of sns message", () => {
   const dynamicPactoptions: Partial<PactMessageProviderOptions> = {
     consumerVersionSelectors: [
       {
-        tag: "master",
+        tag: "production",
         latest: true,
       },
       {

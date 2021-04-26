@@ -12,7 +12,7 @@ env:
   PACT_BROKER_TOKEN: ${{secrets.PACT_BROKER_TOKEN}}
   PACTICIPANT: MartinsMessageProvider
   PACTICIPANT_VERSION: ${{ github.sha }}
-  GIT_BRANCH: master
+  GIT_BRANCH: dev
 
 jobs:
   contract-test:
@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Run tests
-        run: yarn test
+        run: yarn test --ci
         env:
           pactUrl: ${{ github.event.inputs.pactUrl }}
       - name: Deployment Check
