@@ -11,7 +11,7 @@ env:
   PACT_BROKER_BASE_URL: ${{secrets.PACT_BROKER_BASE_URL}}
   PACT_BROKER_TOKEN: ${{secrets.PACT_BROKER_TOKEN}}
   PACTICIPANT: MartinsMessageProvider
-  CI_VERSION: ${{ github.sha }}
+  PACTICIPANT_VERSION: ${{ github.sha }}
   GIT_BRANCH: master
 
 jobs:
@@ -34,7 +34,7 @@ jobs:
         run: >
           yarn pact-broker can-i-deploy 
           -a $PACTICIPANT 
-          -e $CI_VERSION 
+          -e $PACTICIPANT_VERSION 
           --to $GIT_BRANCH 
           -b $PACT_BROKER_BASE_URL 
           -k $PACT_BROKER_TOKEN

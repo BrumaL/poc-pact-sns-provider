@@ -8,7 +8,7 @@ env:
   PACT_BROKER_BASE_URL: ${{secrets.PACT_BROKER_BASE_URL}}
   PACT_BROKER_TOKEN: ${{secrets.PACT_BROKER_TOKEN}}
   PACTICIPANT: MartinsMessageProvider
-  PACTICIPANT_VERSION: ${{ github.event.pull_request.head.sha }}
+  PACTICIPANT_VERSION: ${{ github.sha }}
   DEPLOY_TARGET: ${{ github.base_ref }}
   GIT_BRANCH: master
 
