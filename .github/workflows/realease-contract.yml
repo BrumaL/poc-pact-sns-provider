@@ -25,7 +25,7 @@ jobs:
           docker run pactfoundation/pact-cli:latest
           broker create-version-tag 
           --pacticipant ${PACTICIPANT} 
-          --version ${{ github.event.pull_request.head.sha }} 
+          --version ${{ github.sha }} 
           --tag ${{ github.base_ref }}
           --broker-base-url $PACT_BROKER_BASE_URL
           --broker-token $PACT_BROKER_TOKEN
