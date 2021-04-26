@@ -1,0 +1,101 @@
+name: pact-test-and-release
+
+on: push
+
+env:
+  PACT_BROKER_BASE_URL: ${{secrets.PACT_BROKER_BASE_URL}}
+  PACT_BROKER_TOKEN: ${{secrets.PACT_BROKER_TOKEN}}
+  PACTICIPANT: MartinsMessageProvider
+  PACTICIPANT_VERSION: ${{ github.sha }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Run tests
+        if: ${{ github.ref != 'refs/heads/master' }}
+        run: yarn test --ci
+        env:
+            GIT_BRANCH: ${{ github.ref }}
+      - name: Run tests
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: yarn test --ci
+        env:
+            GIT_BRANCH: dev
+      - name: Can i deploy?
+        run: >
+          yarn pact-broker can-i-deploy
+          --pacticipant $PACTICIPANT
+          --version $PACTICIPANT_VERSION
+          --to dev
+          --broker-base-url $PACT_BROKER_BASE_URL
+          --broker-token $PACT_BROKER_TOKEN
+
+  dev:
+    needs: test
+    if: ${{ github.ref == 'refs/heads/master' }}
+    name: Deploy to dev
+    environment:
+      name: dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - uses: ./.github/actions/release
+        with:
+          stage: dev
+          version: ${{ github.sha }}
+
+  staging:
+    needs: dev
+    name: Deploy to staging
+    environment:
+      name: staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - uses: ./.github/actions/release
+        with:
+          stage: staging
+          version: ${{ github.sha }}
+
+  production:
+    needs: staging
+    name: Deploy to production
+    environment:
+      name: production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - uses: ./.github/actions/release
+        with:
+          stage: production
+          version: ${{ github.sha }}
