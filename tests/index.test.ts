@@ -11,7 +11,7 @@ describe("provider of sns message", () => {
   const request = {
     body: {
       message: "A simple message",
-      id: 1231,
+      id: "1231",
       name: "Polestar 2",
     },
   };
