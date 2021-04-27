@@ -17,7 +17,7 @@ runs:
     - name: Can I deploy?
       run: >
         yarn pact-broker can-i-deploy 
-        -a person-provider 
+        -a MartinsMessageProvider 
         -e ${{ inputs.version }} 
         --to ${{ inputs.stage }} 
         -b $PACT_BROKER_BASE_URL 
@@ -26,7 +26,7 @@ runs:
     - name: Deploy
       run: >
         yarn pact-broker create-version-tag 
-        --pacticipant person-provider
+        --pacticipant MartinsMessageProvider
         --version ${{ inputs.version }} 
         --tag ${{ inputs.stage }}  
         --broker-base-url $PACT_BROKER_BASE_URL 
