@@ -34,15 +34,15 @@ describe("provider of sns message", () => {
   const dynamicPactoptions: Partial<PactMessageProviderOptions> = {
     consumerVersionSelectors: [
       {
-        tag: "production",
-        latest: true,
-      },
-      {
         tag: "dev",
         latest: true,
       },
       {
         tag: "staging",
+        latest: true,
+      },
+      {
+        tag: "production",
         latest: true,
       },
     ],
