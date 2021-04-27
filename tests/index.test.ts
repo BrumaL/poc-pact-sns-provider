@@ -14,6 +14,7 @@ describe("provider of sns message", () => {
       id: "1231",
       name: "Polestar 2",
       color: "black",
+      price: "34",
     },
   };
   const testTimeout = 20000;
