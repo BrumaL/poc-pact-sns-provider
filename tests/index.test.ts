@@ -13,6 +13,7 @@ describe("provider of sns message", () => {
       message: "A simple message",
       id: "1231",
       name: "Polestar 2",
+      color: "black",
     },
   };
   const testTimeout = 20000;

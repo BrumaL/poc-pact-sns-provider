@@ -20,8 +20,12 @@ export const convertRequestToSnsParams = (request: any) => {
         StringValue: request.body.id,
       },
       Name: {
-        DataType: "String",
+        DataType: "string",
         StringValue: request.body.name,
+      },
+      Color: {
+        DataType: "string",
+        StringValue: request.body.color,
       },
     },
   };
