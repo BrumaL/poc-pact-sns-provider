@@ -28,7 +28,7 @@ export const convertRequestToSnsParams = (request: any) => {
         StringValue: request.body.color,
       },
       Price: {
-        DataType: "float",
+        DataType: "number",
         StringValue: request.body.price,
       },
     },
